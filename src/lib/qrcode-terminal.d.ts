@@ -1,9 +1,13 @@
+/* eslint-disable comma-style */
 declare module 'qrcode-terminal' {
-    interface opts {
-        small: boolean
-    }
+  interface Opts {
+    small: boolean
+  }
 
-    export default {
-        generate(input: string, opts?: opts, cb?: Function): void
-    };
+  export default {
+    generate(input: string, opts?: Opts, cb?: Function): void
+    ,
+    setErrorLevel(level: 'L' | 'Q'): void
+    ,
+  };
 }
