@@ -5,9 +5,10 @@ import { sessionData } from './Auth.js';
 
 class PoweredClient extends Client {
   sendMessage(chatId: string, content: MessageContent, options?: MessageSendOptions) {
-    const tt = new Date();
+    const timestamp = (new Date()).toLocaleString();
+    const logMessage = `[${timestamp}]: message sent to ${String(chatId).bgYellow.black}`;
 
-    console.log(`[${tt.toLocaleString()}]: message sent to ${String(chatId).bgYellow.black}`);
+    console.log(logMessage);
 
     return super.sendMessage.call(this, chatId, content, options);
   }
