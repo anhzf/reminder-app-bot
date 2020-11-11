@@ -7,5 +7,6 @@
     },
     "root": true,
     "rules": {
+        "func-names":"off"
     }
 }
