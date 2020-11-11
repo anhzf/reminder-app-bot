@@ -2,8 +2,8 @@
 import { Message } from 'whatsapp-web.js';
 
 export interface Command {
-  command: string;
-  callback: (msg: Message) => void;
+  name: string;
+  action: (msg: Message) => void;
 }
 
 export interface ParsedMessage {
@@ -30,7 +30,7 @@ export default class CommandList {
   private list: Command[] = [];
 
   constructor({ commands, ...ops }: CommandListContructor) {
-    commands?.forEach(({ command, callback }) => this.add(command, callback));
+    commands?.forEach(({ name, action }) => this.add(name, action));
     this.setupOptions(ops);
   }
 
@@ -39,24 +39,24 @@ export default class CommandList {
    */
   public listen(msg: Message) {
     const { command } = CommandList.parseMessage(msg.body);
-    const runned = this.list.find((v) => this.buildCommand(v.command) === command);
+    const runned = this.list.find((v) => this.buildCommand(v.name) === command);
 
-    if (runned) runned.callback(msg);
+    if (runned) runned.action(msg);
     else throw new CommandNotFound();
   }
 
   /**
      * add command
      */
-  public add(command: string, callback: (msg: Message) => void) {
-    this.list.push({ command, callback });
+  public add(name: string, action: (msg: Message) => void) {
+    this.list.push({ name, action });
   }
 
   /**
    * listing command in array form
    */
   public getCommands(): string[] {
-    return this.list.map((v) => v.command);
+    return this.list.map((v) => v.name);
   }
 
   private static parseMessage(msgBody: string): ParsedMessage {

@@ -6,15 +6,15 @@ const command = new CommandList({
   prefix: '!',
   commands: [
     {
-      command: 'menu',
-      callback(msg: Message) {
+      name: 'menu',
+      action(msg: Message) {
         msg.reply(command.getCommands().join(','));
       },
     },
 
     {
-      command: 'profile',
-      callback(msg: Message) {
+      name: 'profile',
+      action(msg: Message) {
         msg.getContact()
           .then((value:Contact) => {
             Client.sendMessage(msg.from, JSON.stringify({ ...value }, null, '\t'));
