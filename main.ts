@@ -13,7 +13,7 @@ client.on('qr', qr => {
 
 client.on('authenticated', setSession);
 
-client.on('ready', async _ => {
+client.on('ready', async () => {
     console.log('Whatsapp bot is Ready!'.bgGreen.black, '\n');
 
 //     const contacts = await client.getContacts();
