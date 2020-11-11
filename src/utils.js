@@ -15,3 +15,7 @@ export function readJsonFile(path) {
 
     return JSON.parse(file);
 }
+
+export function generateChatId(phoneNumber) {
+    return `${phoneNumber}@c.us`;
+}

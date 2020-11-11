@@ -6,7 +6,7 @@ import 'colors';
 const sessionFileUrl = resolve(__dirname(import.meta.url), '../session.json');
 
 function getSession() {
-    console.log('Checking session...'.bgCyan.black);
+    console.log('Checking session...'.blue);
 
     return existsSync(sessionFileUrl) ?
         readJsonFile(sessionFileUrl) : null;
@@ -16,9 +16,9 @@ function getSession() {
 export const sessionData = getSession();
 
 export function setSession(data) {
-    console.log('Updating session...'.bgCyan.black);
+    console.log('Updating session...'.yellow);
     writeFile(sessionFileUrl, JSON.stringify(data), function (err) {
         if (err) throw err;
-        console.log('Session updated!'.bgGreen.black);
+        console.log('Session updated!'.blue);
     });
 }
