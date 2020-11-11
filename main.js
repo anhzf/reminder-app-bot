@@ -1,7 +1,7 @@
 import qrcode, { error } from 'qrcode-terminal';
 import { setSession } from './src/Auth.js';
 import client from './src/Client.js';
-import {  } from 'whatsapp-web.js';
+import scheduled from 'node-schedule';
 import 'colors';
 
 client.on('qr', qr => {
@@ -25,14 +25,24 @@ client.on('ready', async _ => {
         'Hamid Yahya',
         'Zain Bidin',
         'MyTelkom',
+        'Bapak',
+        'Happy family 👨‍👩‍👧‍👦👱🏻‍♀🧑🏻🧑🧑🏼',
+        'Ifah'
     ].includes(name))
 
-    filtered.forEach(contact => {
-        const chatId = `${contact.number}@c.us`;
-        
-        client.sendMessage(chatId, 'Pun10 ganggu... 😪')
-            .then(msg => console.log(`Message sent to ${contact.name}`.bgGreen.black));
-    });
+    scheduled.scheduleJob('00 * * * * *', function () {
+        const time = (new Date).toLocaleString();
+
+        filtered.forEach(contact => {
+            const chatId = `${contact.number}@c.us`;
+
+            client.sendMessage(chatId, `*Pun10 ganggu... 🙏*
+*Pesan ini dikirim setiap detik ke 00*
+[${time}]
+            `)
+                .then(msg => console.log(`[${time}]: Message sent to ${contact.name}`));
+        });
+    })
 });
 
 // client.on('message', message => {
