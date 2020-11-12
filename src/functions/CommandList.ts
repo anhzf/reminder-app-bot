@@ -41,10 +41,8 @@ export default class CommandList {
    */
   public listen(msg: Message) {
     const { command } = CommandList.parseMessage(msg.body);
-    const runned = this.list.find((v) => this.buildCommand(v.name) === command);
 
-    if (runned) runned.action(msg, this, Client);
-    else throw new CommandNotFound();
+    this.trigger(command, msg);
   }
 
   /**
@@ -61,6 +59,16 @@ export default class CommandList {
     return this.list;
   }
 
+  /**
+   * trigger
+   */
+  public trigger(commandName: string, msg: Message) {
+    const runned = this.list.find((v) => this.buildCommand(v.name) === commandName);
+
+    if (runned) runned.action(msg, this, Client);
+    else throw new CommandNotFound();
+  }
+
   private static parseMessage(msgBody: string): ParsedMessage {
     const [
       command,
@@ -69,7 +77,7 @@ export default class CommandList {
     return { command };
   }
 
-  private buildCommand(commandName: string): string {
+  public buildCommand(commandName: string): string {
     return `${this.prefix}${commandName}`;
   }
 
