@@ -21,19 +21,21 @@ export interface CommandListContructor extends CommandListOps {
 }
 
 export class CommandNotFound extends Error {
-  constructor() {
-    super('Command Not Found!');
+  constructor(input: string) {
+    super(`${input.bold} - Command Not Found!`);
   }
 }
 
 export default class CommandList {
   private prefix: string = '';
 
-  private list: Command[] = [];
+  private list: {
+    [index: string]: Command
+  } = {};
 
   constructor({ commands, ...ops }: CommandListContructor) {
-    commands?.forEach((command) => this.add(command));
     this.setupOptions(ops);
+    commands?.forEach((command) => this.add(command));
   }
 
   /**
@@ -42,31 +44,46 @@ export default class CommandList {
   public listen(msg: Message) {
     const { command } = CommandList.parseMessage(msg.body);
 
-    this.trigger(command, msg);
+    try {
+      this.trigger(command, msg);
+    } catch (err) {
+      console.log(String(err).bgRed);
+    }
   }
 
   /**
      * add command
      */
   public add(command: Command) {
-    this.list.push(command);
+    if (Object.keys(this.list).includes(command.name)) throw new Error('Duplicate command name!');
+
+    this.list[this.buildCommand(command.name)] = command;
   }
 
   /**
    * listing command in array form
    */
   public getCommandList() {
-    return this.list;
+    return Object.values(this.list);
+  }
+
+  /**
+   * listingCommand
+   */
+  public listingCommand() {
+    console.log('Available Command:');
+    console.table(this.list);
   }
 
   /**
    * trigger
    */
-  public trigger(commandName: string, msg: Message) {
-    const runned = this.list.find((v) => this.buildCommand(v.name) === commandName);
+  public trigger(msgBody: string, msg: Message) {
+    const runned = this.list[msgBody];
 
-    if (runned) runned.action(msg, this, Client);
-    else throw new CommandNotFound();
+    if (runned) return runned.action(msg, this, Client);
+
+    throw new CommandNotFound(msgBody);
   }
 
   private static parseMessage(msgBody: string): ParsedMessage {
