@@ -4,6 +4,7 @@ import { Message } from 'whatsapp-web.js';
 export interface Command {
   name: string;
   action: (msg: Message) => void;
+  description?: string;
 }
 
 export interface ParsedMessage {
@@ -30,7 +31,7 @@ export default class CommandList {
   private list: Command[] = [];
 
   constructor({ commands, ...ops }: CommandListContructor) {
-    commands?.forEach(({ name, action }) => this.add(name, action));
+    commands?.forEach((command) => this.add(command));
     this.setupOptions(ops);
   }
 
@@ -48,15 +49,15 @@ export default class CommandList {
   /**
      * add command
      */
-  public add(name: string, action: (msg: Message) => void) {
-    this.list.push({ name, action });
+  public add(command: Command) {
+    this.list.push(command);
   }
 
   /**
    * listing command in array form
    */
-  public getCommands(): string[] {
-    return this.list.map((v) => v.name);
+  public getCommandList() {
+    return this.list;
   }
 
   private static parseMessage(msgBody: string): ParsedMessage {
