@@ -1,9 +1,10 @@
 /* eslint-disable max-classes-per-file */
 import { Message } from 'whatsapp-web.js';
+import Client, { PoweredClient } from '../Client.js';
 
 export interface Command {
   name: string;
-  action: (msg: Message) => void;
+  action: (msg: Message, context: CommandList, client: PoweredClient) => void;
   description?: string;
 }
 
@@ -42,7 +43,7 @@ export default class CommandList {
     const { command } = CommandList.parseMessage(msg.body);
     const runned = this.list.find((v) => this.buildCommand(v.name) === command);
 
-    if (runned) runned.action(msg);
+    if (runned) runned.action(msg, this, Client);
     else throw new CommandNotFound();
   }
 

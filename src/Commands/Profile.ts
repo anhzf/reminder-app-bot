@@ -1,7 +1,7 @@
 import { Contact, ContactId, Message } from 'whatsapp-web.js';
-import Client from '../Client';
-import { Command } from '../functions/CommandList';
-import WhatsappFormat from '../helpers/WhatsappFormat';
+import Client from '../Client.js';
+import { Command } from '../functions/CommandList.js';
+import WhatsappFormat from '../helpers/WhatsappFormat.js';
 
 export interface Profile {
   id: ContactId,

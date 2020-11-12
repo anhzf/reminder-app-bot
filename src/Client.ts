@@ -3,7 +3,7 @@ import {
 } from 'whatsapp-web.js';
 import { sessionData } from './Auth.js';
 
-class PoweredClient extends Client {
+export class PoweredClient extends Client {
   sendMessage(chatId: string, content: MessageContent, options?: MessageSendOptions) {
     const timestamp = (new Date()).toLocaleString();
     const logMessage = `[${timestamp}]: message sent to ${String(chatId).bgWhite.black}`;
